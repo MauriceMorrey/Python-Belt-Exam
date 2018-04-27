@@ -1,0 +1,100 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+<a href="/logout">Log out</a>
+<h2>Hello {{current_user.first_name}}</h2>
+{% if messages %}
+		{% for message in messages %}
+			<h4>{{ message }}</h4>
+		{% endfor %}
+    {% endif %}
+
+<h2>Your Wish List</h2>
+<table>
+    <th>
+        <tr>
+            <td>Item</td>
+            <td>Added by</td>
+            <td>Date Added</td>
+            <td>Actions</td>
+        </tr>
+        
+    </th>
+    {% for item in my_items  %}
+        <tr>
+            <td><a href="/exam/{{item.id}}/show">{{item.name}}</a></td>
+            <td>{{item.creator.first_name}} {{item.creator.last_name}}</td>            
+            <td>{{item.date_added}}</td>
+            <td>
+                <!-- <a href="{{item.id}}/edit">Remove Course</a>  -->
+                <form action="{{item.id}}/edit" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+                <!-- <a href="{{item.id}}/dropped"> Drop </a>                      -->
+                <!-- <form action="{{item.id}}/dropped" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Drop item">
+                </form> -->
+            </td>
+        </tr>  
+    {% endfor %}
+    {% for item in current_user.Items_wished.all  %}
+        <tr>
+            <td><a href="/exam/{{item.id}}/show">{{item.name}}</a></td>
+            <td>{{item.creator.first_name}} {{item.creator.last_name}}</td>            
+            <td>{{item.date_added}}</td>
+            <td>
+                <!-- <a href="{{item.id}}/edit">Remove Course</a> -->
+                <form action="{{item.id}}/edit" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+                <!-- <a href="{{item.id}}/dropped"> Drop </a>                            -->
+                <form action="{{item.id}}/dropped" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Remove from my Wishlist">
+                </form>
+            </td>
+        </tr>  
+    {% endfor %}
+
+</table><br>
+
+<h2>Other Users' Wish List</h2>
+<table>
+    <th>
+        <tr>
+            <td>Item</td>
+            <td>Added by</td>
+            <td>Date Added</td>
+            <td>Actions</td>
+        </tr>
+    </th>
+    {% for item in others_items %}
+        <tr>
+            <td><a href="/exam/{{item.id}}/show">{{item.name}}</a></td>
+            <td>{{item.creator.first_name}} {{item.creator.last_name}}</td>
+            <td>{{item.date_added}}</td>
+            <td>
+              
+                {% if item in current_user.Items_wished.all %}
+                <!-- <a href="{{course.id}}/dropped"> Drop </a>  -->
+                <form action="{{item.id}}/dropped" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Drop">
+                </form>
+                {% else %}               
+                <!-- <a href="{{course.id}}/joined"> Join </a> -->
+                <form action="{{item.id}}/joined" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" Value="Add to my wishlist">
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table><br>
+<a href="new">Add Item</a>
+
+{% endblock%}

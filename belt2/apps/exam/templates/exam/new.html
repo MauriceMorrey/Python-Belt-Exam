@@ -1,0 +1,16 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+{% if messages %}
+		{% for item in messages %}
+			<p>{{ item.message }}</p>
+		{% endfor %}
+{% endif %}
+    <h2>Create a new Wishlist item</h2>
+    <form action="/exam/create" method="POST">
+        {% csrf_token %}
+        Item: <br><input type="text" name="name" placeholder="Item/Product name"> <br><br>
+        <input type="submit" value="Add"><br><br>
+        <a href="/exam/"> Home </a> | <a href="/logout">Log Out</a>
+    </form>
+{% endblock%}

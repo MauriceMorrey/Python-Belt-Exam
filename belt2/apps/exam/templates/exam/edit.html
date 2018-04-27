@@ -1,0 +1,18 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+
+    <h1>Are you sure you want to delete the following item?</h1>
+    <p>Item: {{item.name}}</p>
+    <form action='/exam/' method='post'>
+    {% csrf_token %}
+    <input type="submit" value="No">
+    </form><br>
+    <form action='/exam/{{item.id}}/delete' method='post'>
+    {% csrf_token %}
+    <input type="submit" value="Yes! I want to delete this item!">
+    </form><br>
+    <!-- <button > <a href="/belt/"> NO </a> </button>
+    <button> <a href="/belt/{{trip.id}}/delete"> Yes! I want to delete this trip! </a> </button> -->
+
+{% endblock%} 
